@@ -12,6 +12,7 @@ package-lock.json
 .idea/
 .vs/
 .vscode/
+.history/
 
 # Other Files
 .cache/

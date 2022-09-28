@@ -1897,6 +1897,9 @@ async function createWindow() {
         ipcMain.emit('switch-clipboard-watcher')
     }, 1000)
 
+    //When a new song comes from the backend
+    //ytmParty.playSong(view, 'SHYk0rhuQoU'); //Second param is the YT video ID
+
     loadCustomAppScript()
     loadCustomPageScript()
 
@@ -2293,4 +2296,5 @@ const tray = require('./src/providers/trayProvider')
 const updater = require('./src/providers/updateProvider')
 const { getTrackInfo } = require('./src/providers/infoPlayerProvider')
 const { ipcRenderer } = require('electron/renderer')
+const ytmParty = require('./src/utils/ytmParty')
 //const {UpdaterSignal} = require('electron-updater');
