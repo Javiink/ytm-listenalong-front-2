@@ -47,6 +47,8 @@ const mprisProvider = (() => {
 
 const { commit_hash } = require('./commit_hash')
 
+const io = require('socket.io')
+
 /* Variables =========================================================================== */
 const defaultUrl = 'https://music.youtube.com'
 
@@ -1899,6 +1901,8 @@ async function createWindow() {
 
     //When a new song comes from the backend
     //ytmParty.playSong(view, 'SHYk0rhuQoU'); //Second param is the YT video ID
+
+    //const socket = io(); //The ytmp backend connection
 
     loadCustomAppScript()
     loadCustomPageScript()
