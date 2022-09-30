@@ -396,9 +396,9 @@ function createSendSongButton() {
         //TODO: después de llorar, no muestra el texto porque el formatted-string tiene el atributo is empty en cuanto se lo quitas y le seteas el innerText funciona
         //pero no soy capaz de quitar el is-empty, ya pa otro dia
         console.log(addSongElement.getElementsByClassName('text'))
-        addSongElement
-            .getElementsByTagName('text')
-            .querySelector('.yt-formatted-string').innerText = 'Send Song'
+        // addSongElement
+        //     .getElementsByTagName('text')
+        //     .querySelector('.yt-formatted-string').innerText = 'Send Song'
 
         // addSongElement.classList.add(
         //     'ytmusic-menu-popup-renderer',
