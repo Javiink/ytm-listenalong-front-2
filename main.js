@@ -355,7 +355,7 @@ async function createWindow() {
         shell.openExternal(url)
     })
 
-    // view.webContents.openDevTools({ mode: 'detach' });
+    view.webContents.openDevTools({ mode: 'detach' })
     view.webContents.on('did-navigate-in-page', () => {
         if (view.webContents.getURL().indexOf('watch?v=') === 26) {
             mainWindow.webContents.executeJavaScript(`

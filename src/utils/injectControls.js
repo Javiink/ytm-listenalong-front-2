@@ -29,21 +29,8 @@ window.addEventListener('load', () => {
         createBottomPlayerBarContent()
         playerBarScrollToChangeVolume()
         enableAVSwitcher()
+        addContextMenuCustomButtons()
     } else createOffTheRoadContent()
-
-    document.addEventListener('yt-popup-opened', function (e) {
-        // console.log("browse : ", e.target.children[0].getAttribute('href').includes('browse'));
-        // console.log("playlist : ", e.target.children[0].getAttribute('href').includes('playlist'));
-
-        // let clickedElement = e.target.children[0].getAttribute('href')
-        if (e.target.children[0].getAttribute('href').includes('browse')) {
-            createSendSongButton()
-        } else if (
-            e.target.children[0].getAttribute('href').includes('playlist')
-        ) {
-            createSendPlaylistButton()
-        }
-    })
 
     // injectCast()
     loadAudioOutputList()
@@ -377,81 +364,6 @@ function createTopMiddleContent() {
         ipcRenderer.send('log', {
             type: 'warn',
             data: 'error on createTopMiddleContent',
-        })
-    }
-}
-
-function createSendSongButton() {
-    try {
-        const rightClickPopupContainer = document.getElementsByTagName(
-            'tp-yt-paper-listbox'
-        )[0]
-
-        const addSongElement = rightClickPopupContainer.children[0].cloneNode(
-            true
-        )
-        rightClickPopupContainer.append(addSongElement)
-
-        //TODO: Llorar
-        //TODO: después de llorar, no muestra el texto porque el formatted-string tiene el atributo is empty en cuanto se lo quitas y le seteas el innerText funciona
-        //pero no soy capaz de quitar el is-empty, ya pa otro dia
-        console.log(addSongElement.getElementsByClassName('text'))
-        // addSongElement
-        //     .getElementsByTagName('text')
-        //     .querySelector('.yt-formatted-string').innerText = 'Send Song'
-
-        // addSongElement.classList.add(
-        //     'ytmusic-menu-popup-renderer',
-        //     'style-scope',
-        //     'iron-selected'
-        // )
-
-        // // addSongElement.innerText = 'Send a song to server'
-        // addSongElement.innerHTML = '<a id="navigation-endpoint" class="yt-simple-endpoint style-scope ytmusic-menu-navigation-item-renderer" tabindex="-1" href="watch?playlist=OLAK5uy_lQd04V9bQ2-_1MVNR0sUJvBPwmyRkgZAk">' +
-        //   '<yt-icon class="icon style-scope ytmusic-menu-navigation-item-renderer"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;"><g class="style-scope yt-icon"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.808 4.655l2.069 1.978h-.527c-1.656 0-3.312.68-4.458 1.814L12.797 9.75l1.179 1.246 1.317-1.527c.764-.794 1.91-1.247 3.057-1.247h.55l-2.07 2.014 1.178 1.179 4.005-3.993-4.026-3.945-1.178 1.179zm1.974 10.998l-1.974-1.888 1.18-1.179 4.024 3.945-4.004 3.993-1.178-1.179 1.954-1.901h-.434c-1.656 0-3.312-.625-4.458-1.667L8.242 9.8C7.35 9.071 6.204 8.55 4.93 8.55H2l.006-1.794 2.965.003c1.784 0 3.312.521 4.459 1.563l5.904 6.185c.765.73 1.911 1.146 3.058 1.146h.39zm-9.02-2.092l-1.52 1.394c-.892.793-2.038 1.36-3.312 1.36H2v1.588h2.93c1.783 0 3.312-.567 4.459-1.701l1.537-1.396-1.164-1.245z" class="style-scope yt-icon"></path></g></svg><!--css-build:shady--></yt-icon>' +
-        //   '<yt-formatted-string class="text style-scope ytmusic-menu-navigation-item-renderer">Send Song</yt-formatted-string>' +
-        // '</a>'
-
-        // const iconElement = document.createElement('i');
-        // iconElement.id = 'ytmp_icon'
-        // iconElement.classList.add(
-        //     'material-icons',
-        //     'left',
-        //     'icon-normalize'
-        // )
-        // addSongElement.prepend(iconElement);
-    } catch (err) {
-        console.error(err)
-        ipcRenderer.send('log', {
-            type: 'warn',
-            data: 'error on createAddSongButton',
-        })
-    }
-}
-
-function createSendPlaylistButton() {
-    try {
-        const rightClickPopupContainer = document.getElementsByTagName(
-            'tp-yt-paper-listbox'
-        )[0]
-
-        console.log(rightClickPopupContainer)
-
-        const addPlaylistElement = document.createElement('i')
-        addPlaylistElement.id = 'ytmp_send_playlist'
-        addPlaylistElement.classList.add(
-            'yt-simple-endpoint',
-            'style-scope',
-            'ytmusic-menu-navigation-item-renderer'
-        )
-        addPlaylistElement.innerText = 'Send playlist to server'
-
-        rightClickPopupContainer.prepend(addPlaylistElement)
-    } catch (err) {
-        console.error(err)
-        ipcRenderer.send('log', {
-            type: 'warn',
-            data: 'error on createAddSongButton',
         })
     }
 }
@@ -1146,6 +1058,103 @@ function loadAudioOutputList() {
             audioDevices.length ? JSON.stringify(audioDevices) : '[]'
         )
     })
+}
+
+function deleteContextMenuDefaultButtons() {
+    const rightClickPopupContainer = document.getElementsByTagName(
+        'tp-yt-paper-listbox'
+    )[0]
+
+    // rightClickPopupContainer.removeChild(rightClickPopupContainer.getElementsByTagName('ytmusic-menu-service-item-renderer')[0]); //Play next button
+    var serviceButtons = rightClickPopupContainer.getElementsByTagName(
+        'ytmusic-menu-service-item-renderer'
+    )
+    for (let index = 0; index < serviceButtons.length; index++) {
+        rightClickPopupContainer.removeChild(serviceButtons[index])
+    }
+
+    rightClickPopupContainer.removeChild(rightClickPopupContainer.children[1]) // Start radio button
+}
+
+function addContextMenuCustomButtons() {
+    document.addEventListener('yt-popup-opened', function (e) {
+        var url = e.target.children[0].getAttribute('href')
+        if (url.includes('watch') || url.includes('browse')) {
+            deleteContextMenuDefaultButtons()
+            createSendSongButton(url)
+        } else if (url.includes('playlist')) {
+            deleteContextMenuDefaultButtons()
+            createSendPlaylistButton()
+        }
+    })
+}
+
+function createSendSongButton(url) {
+    try {
+        const rightClickPopupContainer = document.getElementsByTagName(
+            'tp-yt-paper-listbox'
+        )[0]
+
+        const addSongElement = rightClickPopupContainer.children[0].cloneNode(
+            true
+        )
+        rightClickPopupContainer.prepend(addSongElement)
+
+        addSongElement.children[0].setAttribute('href', url)
+
+        const textAddSongElement = addSongElement.getElementsByTagName(
+            'yt-formatted-string'
+        )[0]
+        textAddSongElement.removeAttribute('is-empty')
+        textAddSongElement.children[0].innerText = 'Send song to server'
+
+        const iconAddSongElement = addSongElement.getElementsByTagName(
+            'yt-icon'
+        )[0]
+        iconAddSongElement.innerHTML =
+            '<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;"><g class="style-scope yt-icon"><path d="M0 0h24v24H0z" fill="none" class="style-scope yt-icon"></path><path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z" class="style-scope yt-icon"></path></g></svg>'
+
+        addSongElement.addEventListener('tap', (e) => {
+            e.preventDefault()
+        })
+    } catch (err) {
+        console.error(err)
+        ipcRenderer.send('log', {
+            type: 'warn',
+            data: 'error on createAddSongButton',
+        })
+    }
+}
+
+function createSendPlaylistButton() {
+    try {
+        const rightClickPopupContainer = document.getElementsByTagName(
+            'tp-yt-paper-listbox'
+        )[0]
+
+        const addPlaylistElement = rightClickPopupContainer.children[0].cloneNode(
+            true
+        )
+        rightClickPopupContainer.prepend(addPlaylistElement)
+
+        const textAddPlaylistElement = addPlaylistElement.getElementsByTagName(
+            'yt-formatted-string'
+        )[0]
+        textAddPlaylistElement.removeAttribute('is-empty')
+        textAddPlaylistElement.children[0].innerText = 'Send playlist to server'
+
+        const iconAddPlaylistElement = addPlaylistElement.getElementsByTagName(
+            'yt-icon'
+        )[0]
+        iconAddPlaylistElement.innerHTML =
+            '<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;"><g class="style-scope yt-icon"><path d="M0 0h24v24H0z" fill="none" class="style-scope yt-icon"></path><path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z" class="style-scope yt-icon"></path></g></svg>'
+    } catch (err) {
+        console.error(err)
+        ipcRenderer.send('log', {
+            type: 'warn',
+            data: 'error on createAddSongButton',
+        })
+    }
 }
 
 navigator.mediaDevices.ondevicechange = loadAudioOutputList
