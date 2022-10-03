@@ -501,6 +501,24 @@ function createTopRightContent() {
 
         right_content.prepend(elementSettings)
 
+        // YTM PARTY
+        const elementYtmparty = document.createElement('i')
+        elementYtmparty.id = 'ytmparty-sessionbtn'
+        elementYtmparty.title = translate('LABEL_YTMPSESSIONBTN')
+        elementYtmparty.classList.add(
+            'material-icons',
+            'pointer',
+            'shine',
+            'ytmd-icons'
+        )
+        elementYtmparty.innerText = 'group'
+
+        elementYtmparty.addEventListener('click', () => {
+            ipcRenderer.send('window', { command: 'show-ytmp-session' })
+        })
+
+        right_content.prepend(elementYtmparty)
+
         // REMOTE SERVER
         const elementRemoteServer = document.createElement('i')
         elementRemoteServer.id = 'ytmd_remote_server'

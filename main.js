@@ -69,7 +69,8 @@ let mainWindow,
     activityLikeStatus,
     windowsMediaProvider,
     audioDevices,
-    settingsRendererIPC
+    settingsRendererIPC,
+    ytmpSessionWindow
 
 let isFirstTime = false
 
@@ -355,7 +356,7 @@ async function createWindow() {
         shell.openExternal(url)
     })
 
-    // view.webContents.openDevTools({ mode: 'detach' });
+    view.webContents.openDevTools({ mode: 'detach' })
     view.webContents.on('did-navigate-in-page', () => {
         if (view.webContents.getURL().indexOf('watch?v=') === 26) {
             mainWindow.webContents.executeJavaScript(`
@@ -1191,6 +1192,10 @@ async function createWindow() {
             case 'show-shortcut-buttons-settings':
                 windowShortcutButtonsSettings()
                 break
+
+            case 'show-ytmp-session':
+                windowYtmpartySession()
+                break
         }
     })
 
@@ -1704,6 +1709,61 @@ async function createWindow() {
                 )}&page=changelog/changelog&hide=btn-minimize,btn-maximize`,
             }
         )
+    }
+
+    async function windowYtmpartySession() {
+        if (ytmpSessionWindow) ytmpSessionWindow.show()
+        else {
+            const mainWindowPosition = mainWindow.getPosition()
+            const mainWindowSize = mainWindow.getSize()
+
+            const xPos = mainWindowPosition[0] + mainWindowSize[0] / 4
+            const yPos = mainWindowPosition[1] + 200
+
+            ytmpSessionWindow = new BrowserWindow({
+                title: __.trans('LABEL_YTMP_SESSION'),
+                icon: iconDefault,
+                modal: false,
+                frame: windowConfig.frame,
+                titleBarStyle: windowConfig.titleBarStyle,
+                resizable: true,
+                width: 800,
+                minWidth: 800,
+                height: 400,
+                minHeight: 400,
+                x: xPos,
+                y: yPos,
+                autoHideMenuBar: false,
+                skipTaskbar: false,
+                webPreferences: {
+                    nodeIntegration: true,
+                    webviewTag: true,
+                    enableRemoteModule: true,
+                    contextIsolation: false,
+                    nodeIntegrationInSubFrames: true,
+                    webSecurity: false,
+                    sandbox: false,
+                },
+            })
+
+            await ytmpSessionWindow.loadFile(
+                path.join(
+                    app.getAppPath(),
+                    '/src/pages/shared/window-buttons/window-buttons.html'
+                ),
+                {
+                    search:
+                        'page=ytmparty/sessionWindow&icon=group&hide=btn-minimize,btn-maximize&title=' +
+                        __.trans('LABEL_YTMP') +
+                        '',
+                }
+            )
+        }
+
+        ytmpSessionWindow.on('closed', () => {
+            ytmpSessionWindow = null
+        })
+        ytmpSessionWindow.webContents.openDevTools({ mode: 'detach' })
     }
 
     ipcMain.on('switch-clipboard-watcher', () => {

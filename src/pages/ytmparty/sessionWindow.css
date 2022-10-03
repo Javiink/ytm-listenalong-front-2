@@ -1,0 +1,4 @@
+#ytmp-host-session-code, #ytmp-host-session-copycode,
+#ytmp-end-session-code, #ytmp-end-session-copycode{display: inline;}
+#ytmp-session-window-host, #ytmp-session-window-join{padding: 20%, 5%;}
+#ytmp-end-session-copycode:hover, #ytmp-host-session-copycode:hover{cursor: pointer;}

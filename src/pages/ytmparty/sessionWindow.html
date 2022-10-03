@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title i18n="i18n_LABEL_YTMP_SESSIONWINDOW_TITLE">
+            YouTube Music Party Session
+        </title>
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="../../../src/assets/css/materialize.min.css"
+            media="screen,projection"
+        />
+        <link
+            href="../../../src/assets/css/material_icons.css"
+            rel="stylesheet"
+        />
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="../../../src/assets/css/styles.css"
+        />
+        <link type="text/css" rel="stylesheet" href="./sessionWindow.css" />
+        <script type="text/javascript" src="../../../commit_hash.js"></script>
+    </head>
+    <body>
+        <div id="content">
+            <div class="row">
+                <div
+                    class="col s4 offset-s1 center-align"
+                    id="ytmp-session-window-host"
+                >
+                    <h3 i18n="i18n_LABEL_YTMP_SESSIONWINDOW_HOST">Host</h3>
+                    <p>Host your own music party!</p>
+                    <button
+                        id="ytmp-host-session-btn"
+                        class="btn waves-effect waves-light red"
+                    >
+                        <span i18n="i18n_LABEL_YTMP_SESSIONWINDOW_HOSTBTN"
+                            >Create session</span
+                        >
+                    </button>
+                    <span
+                        id="ytmp-session-code-title"
+                        class="hide"
+                        i18n="i18n_LABEL_YTMP_SESSIONWINDOW_SESSIONCODETITLE"
+                        >Your session code:</span
+                    >
+                    <pre id="ytmp-host-session-code" class="hide">
+abcdef0123456</pre
+                    >
+                    <i
+                        id="ytmp-host-session-copycode"
+                        class="hide material-icons icon-normalize"
+                        >content_copy</i
+                    >
+                </div>
+                <div
+                    class="col s4 offset-s1 center-align"
+                    id="ytmp-session-window-join"
+                >
+                    <h3 i18n="i18n_LABEL_YTMP_SESSIONWINDOW_JOIN">Join</h3>
+                    <p>Join your friend's party!</p>
+                    <div class="row">
+                        <div class="col s9">
+                            <input
+                                id="ytmp-session-code-input"
+                                class="white-text center-align"
+                                type="text"
+                            />
+                        </div>
+                        <div class="col s3">
+                            <div
+                                class="btn"
+                                id="ytmp-join-session-btn"
+                                disabled
+                            >
+                                <span
+                                    i18n="i18n_LABEL_YTMP_SESSIONWINDOW_JOINBTN"
+                                    >Join!</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <span
+                        id="ytmp-join-helper-text"
+                        i18n="i18n_LABEL_YTMP_SESSIONWINDOW_SESSIONJOINHELPER"
+                        >Ask your host friend for the session code!</span
+                    >
+                </div>
+                <div
+                    class="col s12 center-align hide"
+                    id="ytmp-session-window-end"
+                >
+                    <h4>Your current session ID:</h4>
+                    <pre id="ytmp-end-session-code">abcdef0123456</pre>
+                    <i
+                        id="ytmp-end-session-copycode"
+                        class="material-icons icon-normalize"
+                        >content_copy</i
+                    >
+                    <br />
+                    <button
+                        id="ytmp-end-session-btn"
+                        class="btn waves-effect waves-light red"
+                    >
+                        <span i18n="i18n_LABEL_YTMP_SESSIONWINDOW_ENDSESSIONBTN"
+                            >End session</span
+                        >
+                    </button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
